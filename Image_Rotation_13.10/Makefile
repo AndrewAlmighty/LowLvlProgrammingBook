@@ -4,8 +4,8 @@ LD = gcc
 
 BUILDDIR = build
 OBJDIR = obj
-OBJS = $(addprefix $(OBJDIR)/, main.o)
-HEADERS = 
+OBJS = $(addprefix $(OBJDIR)/, main.o image_rot.o)
+HEADERS = image_rot.h
 
 vpath %.c src
 vpath %.h src

@@ -2,6 +2,8 @@
 #include <stdbool.h>
 #include <string.h>
 
+#include "image_rot.h"
+
 //This function prints info how to use this program. If *opt == 1 - asked for help. Else if *opt == 2, wrong parameters 
 void print_help(const int opt)
 {
@@ -64,8 +66,9 @@ int main(int argc, char** argv)
 			return 0;
 		}
 		
-		
+		//we start rotating the image
+		run(source_name, dest_name);		
 	}	   
-	  
+	
 	return 0;
 }
