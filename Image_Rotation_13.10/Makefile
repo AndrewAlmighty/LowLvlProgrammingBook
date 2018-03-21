@@ -17,8 +17,7 @@ $(BUILDDIR)/imageRotator: $(OBJS) | $(BUILDDIR)
 	
 $(OBJS) : $(OBJDIR)/%.o : %.c $(HEADERS) | $(OBJDIR)
 	$(CC) $(CFLAGS) -c $< -o $@
-
-#if there are no OBJDIR and BUILDDIR, make them.
+ 
 $(OBJDIR):
 	mkdir $(OBJDIR)
 	
