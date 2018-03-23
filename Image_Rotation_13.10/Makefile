@@ -28,5 +28,5 @@ $(BUILDDIR):
 	clean
 	
 clean:
-	rm -f build/* \
+	rm -f build/imageRotator
 	rm -f obj/* 

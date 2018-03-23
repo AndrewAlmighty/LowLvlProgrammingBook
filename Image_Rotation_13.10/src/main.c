@@ -25,6 +25,16 @@ bool check_name(int *i, const char* name)
 	return true;
 }
 
+void run(const char * src_name, const char *dst_name)
+{
+	//This function is responsible for all job we do on the image.
+	struct image img;
+	img = deserialize(src_name);
+	//img = rotate(img);
+	serialize(dst_name, &img);
+}
+
+
 int main(int argc, char** argv)
 {
 	if(argc < 2)	

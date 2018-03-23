@@ -1,8 +1,19 @@
 #ifndef _IMAGE_ROT_H_
 #define _IMAGE_ROT_H_
 
-#include <string.h>
+#include <stdint.h>
 
-void run(const char * src_name, const char *dst_name);
+struct pixel;
+
+struct image
+{
+	uint32_t width, height, row_size;
+	uint8_t header[54];
+	struct pixel* data;
+};
+
+struct image rotate(struct image const source);
+struct image deserialize(const char *name);
+void serialize(const char *name, struct image const * img);
 
 #endif
