@@ -35,15 +35,14 @@ enum read_status from_bmp(FILE *in, struct image* const read)
 	fread(&(read -> width), sizeof(uint32_t), 1, in);
 	fread(&(read -> height), sizeof(uint32_t), 1, in);	
 	
-	size_t readed = 0;
 	read -> row_size = (4 - ((read -> width * 3 ) % 4)) + (read -> width) * sizeof(struct pixel);
 	
 	//Copy the pixel table	
 	fseek(in, offset, SEEK_SET);
-	read -> data = malloc(sizeof(struct pixel) * ((read -> width) * (read -> height) * 3));
+	read -> data = malloc(read -> row_size * read -> height * 3);
 	uint32_t i;
 	for(i = 0; i <= read -> height; i++)
-		readed += fread((read -> data) + (read -> row_size * i) , sizeof(struct pixel), read -> row_size, in);
+		fread((read -> data) + (read -> row_size * i) , 1, read -> row_size, in);
 						
 	return READ_OK;
 }
@@ -53,7 +52,7 @@ enum write_status to_bmp(FILE* out, struct image const* img)
 	fwrite(&(img -> header), sizeof(uint8_t), 54, out);
 	uint32_t i;
 	for(i = 0; i <= img -> height; i++)	
-		fwrite(((img -> data) + (img -> row_size * i)), sizeof(struct pixel), img -> row_size, out);	
+		fwrite(((img -> data) + (img -> row_size * i)), 1, img -> row_size, out);	
 
 	return WRITE_OK;
 }
@@ -94,6 +93,7 @@ void serialize(const char *name, struct image const * img)
 	
 	to_bmp(file, img);
 	fclose(file);
+	free(img -> data);
 }
 
 
