@@ -24,9 +24,10 @@ struct pixel
 
 enum read_status from_bmp(FILE *in, struct image* const read)
 {
-	uint32_t offset;
+	//Get the header
 	fread(&(read -> header), sizeof(uint8_t), 54, in);
 	
+	uint32_t offset;
 	fseek(in, 10, SEEK_SET);
 	fread(&offset, sizeof(uint32_t), 1, in);
 	
@@ -35,14 +36,13 @@ enum read_status from_bmp(FILE *in, struct image* const read)
 	fread(&(read -> width), sizeof(uint32_t), 1, in);
 	fread(&(read -> height), sizeof(uint32_t), 1, in);	
 	
-	read -> row_size = (4 - ((read -> width * 3 ) % 4)) + (read -> width) * sizeof(struct pixel);
-	
-	//Copy the pixel table	
+	//Copy the pixel table. We need to allocate memory, count the row_size and then read image.
 	fseek(in, offset, SEEK_SET);
+	read -> row_size = (4 - ((read -> width * 3 ) % 4)) + (read -> width) * sizeof(struct pixel);	//row size must be divisible by 4. If it's not, add number to make it divisible by 4.
 	read -> data = malloc(read -> row_size * read -> height * 3);
 	uint32_t i;
 	for(i = 0; i <= read -> height; i++)
-		fread((read -> data) + (read -> row_size * i) , 1, read -> row_size, in);
+		fread((read -> data) + (read -> row_size * i) , sizeof(uint8_t), read -> row_size, in);
 						
 	return READ_OK;
 }
@@ -52,7 +52,7 @@ enum write_status to_bmp(FILE* out, struct image const* img)
 	fwrite(&(img -> header), sizeof(uint8_t), 54, out);
 	uint32_t i;
 	for(i = 0; i <= img -> height; i++)	
-		fwrite(((img -> data) + (img -> row_size * i)), 1, img -> row_size, out);	
+		fwrite(((img -> data) + (img -> row_size * i)), sizeof(uint8_t), img -> row_size, out);	
 
 	return WRITE_OK;
 }

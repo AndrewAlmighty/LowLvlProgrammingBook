@@ -50,7 +50,7 @@ int main(int argc, char** argv)
 	{		
 		int i;				
 		bool is_source = false;		
-		char source_name[30], dest_name[30];		
+		char source_name[30] = {'\0'}, dest_name[30] = {'\0'};		
 		
 		//Checking arguments ...
 		for(i = 0; i < argc; i++)
