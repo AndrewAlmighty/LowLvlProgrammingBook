@@ -13,6 +13,7 @@ struct image
 };
 
 struct image rotate(struct image const source);
+struct image blurring(struct image const source);
 struct image deserialize(const char *name);
 void serialize(const char *name, struct image const * img);
 

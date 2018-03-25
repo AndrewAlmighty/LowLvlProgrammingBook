@@ -25,12 +25,16 @@ bool check_name(int *i, const char* name)
 	return true;
 }
 
-void run(const char * src_name, const char *dst_name)
+void run(const char * src_name, const char *dst_name, bool is_blurring)
 {
 	//This function is responsible for all job we do on the image.
 	struct image img;
 	img = deserialize(src_name);
-	//img = rotate(img);
+	img = rotate(img);
+	
+	if(is_blurring)
+		img = blurring(img);
+		
 	serialize(dst_name, &img);
 }
 
@@ -49,7 +53,7 @@ int main(int argc, char** argv)
 	else
 	{		
 		int i;				
-		bool is_source = false;		
+		bool is_source = false, is_blurring = false;		
 		char source_name[30] = {'\0'}, dest_name[30] = {'\0'};		
 		
 		//Checking arguments ...
@@ -67,6 +71,11 @@ int main(int argc, char** argv)
 			if(strcmp(argv[i], "-d") == 0 && (i + 1 < argc))
 				if(check_name(&i, argv[i + 1]) == 1)
 					strcpy(dest_name, argv[i]);
+			
+			if(strcmp(argv[i], "-b") == 0)
+				is_blurring = true;
+			
+			
 		}
 		
 		//if no source file is given we do nothing.
@@ -77,7 +86,7 @@ int main(int argc, char** argv)
 		}
 		
 		//we start rotating the image
-		run(source_name, dest_name);		
+		run(source_name, dest_name, is_blurring);		
 	}	   
 	
 	return 0;

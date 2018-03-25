@@ -1,4 +1,4 @@
-#include "image_rot.h"
+ #include "image_rot.h"
 
 #include <stdio.h>
 #include <malloc.h>
@@ -49,7 +49,16 @@ enum read_status from_bmp(FILE *in, struct image* const read)
 
 enum write_status to_bmp(FILE* out, struct image const* img)
 {
+	//copy the header
 	fwrite(&(img -> header), sizeof(uint8_t), 54, out);
+	
+	//set width and height
+	fseek(out, 18, SEEK_SET);
+	fwrite(&(img -> width), sizeof(uint32_t), 1, out);
+	fwrite(&(img -> height), sizeof(uint32_t), 1, out);
+	
+	//copy the pixel table
+	fseek(out, 54, SEEK_SET);
 	uint32_t i;
 	for(i = 0; i <= img -> height; i++)	
 		fwrite(((img -> data) + (img -> row_size * i)), sizeof(uint8_t), img -> row_size, out);	
@@ -60,8 +69,25 @@ enum write_status to_bmp(FILE* out, struct image const* img)
 struct image rotate(struct image const source)
 {
 	struct image new_img;
+	
+	//copy header and set new height and width value
+	new_img.header[54] = source.header[54];
 	new_img.width = source.height;		
 	new_img.height = source.width;
+	
+	//rotate the image
+	uint32_t i;
+	for(i = 0; i < new_img.height; i++)
+	{
+			
+	}
+	
+	return new_img;
+}
+
+struct image blurring(struct image const source)
+{
+	struct image new_img;
 	
 	return new_img;
 }
